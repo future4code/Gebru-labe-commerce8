@@ -12,7 +12,7 @@ row-gap: 6px;
 column-gap: 6px;
 `
 
-export default class Card extends React.Component {
+export default class Carrinho extends React.Component {
 
     render() {
 
