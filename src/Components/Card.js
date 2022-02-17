@@ -30,9 +30,9 @@ export default class Card extends React.Component {
 
       return (
         <ContainerPrincipal>
-            <ProdutoImagem src={produto.imageUrl}></ProdutoImagem>
-            <p><b>{produto.name}</b></p>
-            <p>Valor do produto: R${produto.value},00</p>
+            <ProdutoImagem src={produto.imagem}></ProdutoImagem>
+            <p><b>{produto.title}</b></p>
+            <p>Valor do produto: R${produto.price},00</p>
             <button onClick={() => this.props.AdicionaCarrinho(produto.id)}>Adicionar no carrinho</button>
         </ContainerPrincipal>
       )
