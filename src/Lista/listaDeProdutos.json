@@ -1,0 +1,72 @@
+[
+    {
+      "id": "1",
+      "title": "Camiseta Foguete",
+      "price": 50,
+      "taken": true,
+      "imagem": "https://picsum.photos/300/400?a=1"
+    },
+    {
+      "id": "2",
+      "title": "Camiseta Asteróide",
+      "price": 55,
+      "taken": true,
+      "imagem": "https://picsum.photos/300/400?a=2"
+    },
+    {
+      "id": "3",
+      "title": "Camisa Nasa",
+      "price": 40,
+      "taken": true,
+      "imagem": "https://picsum.photos/300/400?a=3"
+    },
+    {
+      "id": "4",
+      "title": "Regata ET",
+      "price": 30,
+      "taken": true,
+      "imagem": "https://picsum.photos/300/400?a=4"
+    },
+    {
+      "id": "5",
+      "title": "Ragata Asteróide",
+      "price": 35,
+      "taken": true,
+      "imagem": "https://picsum.photos/300/400?a=5"
+    },
+    {
+      "id": "6",
+      "title": "Moleton Asteróide",
+      "price": 120,
+      "taken": true,
+      "imagem": "https://picsum.photos/300/400?a=6"
+    },
+    {
+      "id": "7",
+      "title": "Moleton ET",
+      "price": 150,
+      "taken": true,
+      "imagem": "https://picsum.photos/300/400?a=7"
+    },
+    {
+      "id": "8",
+      "title": "Ragata Nasa",
+      "price": 50,
+      "taken": true,
+      "imagem": "https://picsum.photos/300/300?a=8"
+    },
+    {
+      "id": "9",
+      "title": "Ragata Foguete",
+      "price": 35,
+      "taken": true,
+      "imagem": "https://picsum.photos/300/400?a=9"
+    },
+    {
+      "id": "10",
+      "title": "Moleton Foguete",
+      "price": 200,
+      "taken": true,
+      "imagem": "https://picsum.photos/300/400?a=10"
+    } 
+]
