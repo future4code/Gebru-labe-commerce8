@@ -1,4 +1,6 @@
 import React from 'react';
+import {ContainerHeader} from './Componentes/header';
+
 import listaDeProdutos from './Lista/listaDeProdutos.json'
 import {ComponenteFiltro} from './Components/filtro.js';
 import Card from './Components/Card';
@@ -94,7 +96,10 @@ valorTotal = () => {
 
     return (
       <div>
-        <ComponenteFiltro/>
+        <div>
+          <ContainerHeader/>
+        </div>  
+          <ComponenteFiltro/>
         {meusProdutos}
         <CarrinhoContainer>
           <h3>Carrinho</h3>
@@ -106,3 +111,4 @@ valorTotal = () => {
   }
 }
 export default App;
+
