@@ -2,8 +2,8 @@ import React from 'react';
 import {ComponenteFiltro} from './Components/filters/filtro';
 // import listaProd from './lista/listaDeProdutos.json'; DESCOMENTAR QUANDO INSERIDA A LISTA DE PRODUTOS
 // import Card from './Components....'; DESCOMENTAR QUANDO INSERIDA A LISTA DE PRODUTOS
+import {ContainerHeader} from './Componentes/header';
 
-import {ComponenteFiltro} from './Components/filtro.js';
 import Card from './Components/Card';
 import Carrinho from './Components/Carrinho'
 import styled from 'styled-components';
@@ -210,6 +210,9 @@ valorTotal = () => {
         </div>
       </div>
       <div>
+        <div>
+          <ContainerHeader/>
+        </div>  
         {meusProdutos}
         <CarrinhoContainer>
           <h3>Carrinho</h3>
@@ -222,3 +225,4 @@ valorTotal = () => {
   }
 }
 export default App;
+
