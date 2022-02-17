@@ -1,5 +1,5 @@
 import React from "react";
-import LogoFoguete from "../Imagens/foguete.png";
+import LogoFoguete from "../../Imagens/foguete.png";
 import {HeaderEsquerda, Logo, TituloH1, Menu, ContainerHeaderEstilizacao} from "./styledHeader"
 
 export function ContainerHeader(){

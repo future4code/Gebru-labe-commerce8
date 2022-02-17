@@ -1,10 +1,9 @@
 import React from 'react';
-import {ComponenteFiltro} from './Components/filters/filtro';
-// import listaProd from './lista/listaDeProdutos.json'; DESCOMENTAR QUANDO INSERIDA A LISTA DE PRODUTOS
-// import Card from './Components....'; DESCOMENTAR QUANDO INSERIDA A LISTA DE PRODUTOS
-import {ContainerHeader} from './Componentes/header';
-
+import {ComponenteFiltro} from './Components/PastaFilters/filtro';
+import listaProd from './Lista/listaDeProdutos.json';
 import Card from './Components/Card';
+import {ContainerHeader} from './Components/PastaHeader/header';
+
 import Carrinho from './Components/Carrinho'
 import styled from 'styled-components';
 
@@ -148,7 +147,35 @@ valorTotal = () => {
   }
   return valorTotal
 }
+
+// =========================================================================================
+// Filtro
+
+filtroteste = () => { 
+  this.state.camisetas.filter(prod => {
+    return (prod.title.toLowerCase().includes(this.state.inputBuscarPorNome.toLowerCase()))
+  })
+  .filter(prod => {
+    return (this.state.inputValorMinimo === "" || prod.price >= this.state.inputValorMinimo)
+  })
+  .filter(prod => {
+    return (this.state.inputValorMaximo === "" || prod.price <= this.state.inputValorMaximo)
+  })
+  .sort((currentProd, nextProd) => {
+    switch (this.state.sortingParameter){
+      case "title":
+        return this.state.order * (currentProd.title.localCompare(nextProd.title))
+      default:
+        return this.state.order * (currentProd.price - nextProd.price)
+    }
+  })
+  .map(prod => {
+    return <Card key={prod.id} prod={prod} />
+  })
+  }
   
+// ======================================================================
+// RENDER
   render(){
     const meusProdutos = this.state.camisetas.map((produto) => {
       return <Card
@@ -184,8 +211,8 @@ valorTotal = () => {
           mudaOrder={this.mudaOrder}
         />
 
-        <div>
-          {{this.state.produtos
+        {/* <div>
+          {this.state.camisetas
           .filter(prod => {
             return (prod.title.toLowerCase().includes(this.state.inputBuscarPorNome.toLowerCase()))
           })
@@ -206,9 +233,10 @@ valorTotal = () => {
           .map(prod => {
             return <Card key={prod.id} prod={prod} />
           })
-        }}
-        </div>
-      </div>
+          }
+        </div> */}
+
+        
       <div>
         <div>
           <ContainerHeader/>
@@ -225,4 +253,3 @@ valorTotal = () => {
   }
 }
 export default App;
-
