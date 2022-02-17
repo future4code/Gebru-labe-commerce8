@@ -3,21 +3,43 @@ import {ComponenteFiltro} from './Components/filters/filtro';
 // import listaProd from './lista/listaDeProdutos.json'; DESCOMENTAR QUANDO INSERIDA A LISTA DE PRODUTOS
 // import Card from './Components....'; DESCOMENTAR QUANDO INSERIDA A LISTA DE PRODUTOS
 
+import {ComponenteFiltro} from './Components/filtro.js';
+import Card from './Components/Card';
+import Carrinho from './Components/Carrinho'
+import styled from 'styled-components';
+
+const CarrinhoContainer = styled.div`
+display: grid;
+align-items: center;
+text-align: center;
+justify-items: center;
+row-gap: 6px;
+column-gap: 6px;
+border: 1px solid black;
+`
+
 class App extends React.Component{
   // Cria um estado
   state = {
     // produtos: listaProd, DESCOMENTAR QUANDO INSERIDA A LISTA DE PRODUTOS
+    camisetas: listaProd,
     // ============================
-    // Variáveis para LocalStorage
     inputValorMinimo: '',
     inputValorMaximo: '',
     inputBuscarPorNome: '',
     sortingParameter: 'title',
-    order: 1
-
+    order: 1,
+    
     // ============================
-    //Variáveis para o Filtro
-
+    //Produto no Carrinho
+    produtoNoCarrinho: [
+      {
+        id: 14,
+        title: "Camiseta de Robô",
+        price: 100,
+        quantidade: 1
+    },
+    ]  
   }
 
   // Puxa os itens salvos no localStorage para os campos de input novamente, 
@@ -79,11 +101,70 @@ class App extends React.Component{
       inputBuscarPorNome: ''
     })
   }
-  // =========================================================================
-  // Filtro
+ 
+AdicionarCarrinho = (camisetaID) => {
+  const camisetaNoCarrinho = this.state.produtoNoCarrinho.find(produto => camisetaID === produto.id)
 
+  if (camisetaNoCarrinho) {
+    const attCarrinho = this.state.produtoNoCarrinho.map(produto => {
+      if (camisetaID === produto.id) {
+        return {
+          ...produto,
+          quantidade: produto.quantidade + 1
+        }
+      }
+      return produto
+    })
 
+    this.setState ({produtoNoCarrinho: attCarrinho})
+  } else {
+    const camisetaAcrescentar = this.state.camisetas.find(produto => camisetaID === produto.id)
+
+    const novoProdutoNoCarrinho = [...this.state.produtoNoCarrinho, {...camisetaAcrescentar, quantidade: 1}]
+
+    this.setState({produtoNoCarrinho: novoProdutoNoCarrinho})
+  }
+}
+
+limparCarrinho = (camisetaID) => {
+  const camisetaNoCarrinho = this.state.produtoNoCarrinho.map((produto) => {
+    if (camisetaID === produto.id) {
+      return {
+        ...produto,
+        quantidade: produto.quantidade - 1
+      }
+    }
+    return produto
+  }).filter((produto) => produto.quantidade > 0)
+
+  this.setState({produtoNoCarrinho: camisetaNoCarrinho})
+}
+
+valorTotal = () => {
+  let valorTotal = 0
+
+  for(let camisetas of this.state.produtoNoCarrinho) {
+    valorTotal += camisetas.price * camisetas.quantidade
+  }
+  return valorTotal
+}
+  
   render(){
+    const meusProdutos = this.state.camisetas.map((produto) => {
+      return <Card
+      produto={produto}
+      AdicionaCarrinho={this.AdicionarCarrinho}
+      />
+    })
+
+    const meuCarrinho = this.state.produtoNoCarrinho.map((produto) => {
+      return <Carrinho
+      camisetasNoCarrinho={produto}
+      removerItens={this.limparCarrinho}
+      AdicionaCarrinho={this.AdicionarCarrinho}
+      />
+    })
+
     return (
       <div>
         <ComponenteFiltro
@@ -104,7 +185,7 @@ class App extends React.Component{
         />
 
         <div>
-          {/* {this.state.produtos
+          {{this.state.produtos
           .filter(prod => {
             return (prod.title.toLowerCase().includes(this.state.inputBuscarPorNome.toLowerCase()))
           })
@@ -125,9 +206,18 @@ class App extends React.Component{
           .map(prod => {
             return <Card key={prod.id} prod={prod} />
           })
-        } */}
+        }}
         </div>
       </div>
+      <div>
+        {meusProdutos}
+        <CarrinhoContainer>
+          <h3>Carrinho</h3>
+          {meuCarrinho}
+          <p><b>Valor total carrinho: </b>R${this.valorTotal()},00</p>
+        </CarrinhoContainer>
+      </div>
+     </div>
     )
   }
 }
