@@ -1,26 +1,18 @@
-import React from 'react';
-import {ComponenteFiltro} from './Components/PastaFilters/filtro';
-import listaProd from './Lista/listaDeProdutos.json';
-import Card from './Components/Card';
-import {ContainerHeader} from './Components/PastaHeader/header';
+// Realizando as importações 
+import React from 'react';                                          // Importando o React
+import listaProd from './Lista/listaDeProdutos.json';               // Importando a lista de produtos
 
-import Carrinho from './Components/Carrinho'
-import styled from 'styled-components';
+import {ComponenteFiltro} from './Components/PastaFilters/filtro';  // Importando o Componente do filtro
+import Card from './Components/PastaCard/Card';                               // Importando o Componente do Card
+import Carrinho from './Components/PastaCarrinho/Carrinho'                        // Importando o Componente do Carrinho
+import {CarrinhoContainer} from './Components/PastaCarrinho/styledCarrinho';
+import {ContainerHeader} from './Components/PastaHeader/header';    // Importando o Header da página
 
-const CarrinhoContainer = styled.div`
-display: grid;
-align-items: center;
-text-align: center;
-justify-items: center;
-row-gap: 6px;
-column-gap: 6px;
-border: 1px solid black;
-`
 
-class App extends React.Component{
-  // Cria um estado
+export default class App extends React.Component{
+  // Criando um estado
   state = {
-    // produtos: listaProd, DESCOMENTAR QUANDO INSERIDA A LISTA DE PRODUTOS
+    
     camisetas: listaProd,
     // ============================
     inputValorMinimo: '',
@@ -41,6 +33,8 @@ class App extends React.Component{
     ]  
   }
 
+  // ======================================================================
+  // FILTRO
   // Puxa os itens salvos no localStorage para os campos de input novamente, 
   // caso a página seja recarregada
   componentDidMount(){
@@ -77,7 +71,6 @@ class App extends React.Component{
     this.setState({ order: event.target.value })
   }
 
-
   // Função para pegar as informações do localStorage e enviar para o componentDidMount
   // quando a página for recarregada
   pegarInfos = () => {
@@ -101,100 +94,118 @@ class App extends React.Component{
     })
   }
  
-AdicionarCarrinho = (camisetaID) => {
-  const camisetaNoCarrinho = this.state.produtoNoCarrinho.find(produto => camisetaID === produto.id)
 
-  if (camisetaNoCarrinho) {
-    const attCarrinho = this.state.produtoNoCarrinho.map(produto => {
+
+  // ==============================================================================
+  // FUNÇÃO CARRINHO
+  AdicionarCarrinho = (camisetaID) => {
+    const camisetaNoCarrinho = this.state.produtoNoCarrinho.find(produto => camisetaID === produto.id)
+
+    if (camisetaNoCarrinho) {
+      const attCarrinho = this.state.produtoNoCarrinho.map(produto => {
+        if (camisetaID === produto.id) {
+          return {
+            ...produto,
+            quantidade: produto.quantidade + 1
+          }
+        }
+        return produto
+      })
+
+    this.setState ({produtoNoCarrinho: attCarrinho})
+    } else {
+      const camisetaAcrescentar = this.state.camisetas.find(produto => camisetaID === produto.id)
+
+      const novoProdutoNoCarrinho = [...this.state.produtoNoCarrinho, {...camisetaAcrescentar, quantidade: 1}]
+
+    this.setState({produtoNoCarrinho: novoProdutoNoCarrinho})
+    }
+  }
+
+  limparCarrinho = (camisetaID) => {
+    const camisetaNoCarrinho = this.state.produtoNoCarrinho.map((produto) => {
       if (camisetaID === produto.id) {
         return {
           ...produto,
-          quantidade: produto.quantidade + 1
+          quantidade: produto.quantidade - 1
         }
       }
       return produto
-    })
+    }).filter((produto) => produto.quantidade > 0)
 
-    this.setState ({produtoNoCarrinho: attCarrinho})
-  } else {
-    const camisetaAcrescentar = this.state.camisetas.find(produto => camisetaID === produto.id)
-
-    const novoProdutoNoCarrinho = [...this.state.produtoNoCarrinho, {...camisetaAcrescentar, quantidade: 1}]
-
-    this.setState({produtoNoCarrinho: novoProdutoNoCarrinho})
+    this.setState({produtoNoCarrinho: camisetaNoCarrinho})
   }
-}
 
-limparCarrinho = (camisetaID) => {
-  const camisetaNoCarrinho = this.state.produtoNoCarrinho.map((produto) => {
-    if (camisetaID === produto.id) {
-      return {
-        ...produto,
-        quantidade: produto.quantidade - 1
-      }
+  valorTotal = () => {
+    let valorTotal = 0
+
+    for(let camisetas of this.state.produtoNoCarrinho) {
+      valorTotal += camisetas.price * camisetas.quantidade
     }
-    return produto
-  }).filter((produto) => produto.quantidade > 0)
-
-  this.setState({produtoNoCarrinho: camisetaNoCarrinho})
-}
-
-valorTotal = () => {
-  let valorTotal = 0
-
-  for(let camisetas of this.state.produtoNoCarrinho) {
-    valorTotal += camisetas.price * camisetas.quantidade
+    return valorTotal
   }
-  return valorTotal
-}
 
-// =========================================================================================
-// Filtro
-
-filtroteste = () => { 
-  this.state.camisetas.filter(prod => {
-    return (prod.title.toLowerCase().includes(this.state.inputBuscarPorNome.toLowerCase()))
-  })
-  .filter(prod => {
-    return (this.state.inputValorMinimo === "" || prod.price >= this.state.inputValorMinimo)
-  })
-  .filter(prod => {
-    return (this.state.inputValorMaximo === "" || prod.price <= this.state.inputValorMaximo)
-  })
-  .sort((currentProd, nextProd) => {
-    switch (this.state.sortingParameter){
-      case "title":
-        return this.state.order * (currentProd.title.localCompare(nextProd.title))
-      default:
-        return this.state.order * (currentProd.price - nextProd.price)
-    }
-  })
-  .map(prod => {
-    return <Card key={prod.id} prod={prod} />
-  })
-  }
   
 // ======================================================================
 // RENDER
   render(){
     const meusProdutos = this.state.camisetas.map((produto) => {
-      return <Card
-      produto={produto}
-      AdicionaCarrinho={this.AdicionarCarrinho}
-      />
+      return (
+        <Card
+          key={produto.id}
+          produto={produto}
+          AdicionaCarrinho={this.AdicionarCarrinho}
+        />)
     })
 
     const meuCarrinho = this.state.produtoNoCarrinho.map((produto) => {
-      return <Carrinho
-      camisetasNoCarrinho={produto}
-      removerItens={this.limparCarrinho}
-      AdicionaCarrinho={this.AdicionarCarrinho}
-      />
+      return (
+        <Carrinho
+          key={produto.id}
+          camisetasNoCarrinho={produto}
+          removerItens={this.limparCarrinho}
+          AdicionaCarrinho={this.AdicionarCarrinho}
+        />)
     })
 
-    return (
+    
+    const funcaoFiltro = () => {
+
+    this.state.camisetas.filter(prod => {
+      return (prod.title.toLowerCase().includes(this.state.inputBuscarPorNome.toLowerCase()))
+    })
+    .filter(prod => {
+      return (this.state.inputValorMinimo === "" || prod.price >= this.state.inputValorMinimo)
+    })
+    .filter(prod => {
+      return (this.state.inputValorMaximo === "" || prod.price <= this.state.inputValorMaximo)
+    })
+    .sort((currentProd, nextProd) => {
+      switch (this.state.sortingParameter){
+        case "title":
+          return this.state.order * (currentProd.title.localeCompare(nextProd.title))
+        default:
+          return this.state.order * (currentProd.price - nextProd.price)
+      }
+    })
+    .map(prod => {
+      return (
+        <Card 
+          key={prod.id} 
+          prod={prod}
+          AdicionaCarrinho={this.AdicionarCarrinho}
+
+        />)
+    })
+    }
+
+    return (       
       <div>
-        <ComponenteFiltro
+        <div>
+          <ContainerHeader/>
+        </div>
+        <div>
+          <ComponenteFiltro
           inputValorMinimo={this.state.inputValorMinimo}
           mudaValorMinimo={this.mudaValorMinimo}
 
@@ -209,47 +220,19 @@ filtroteste = () => {
 
           order={this.state.order}
           mudaOrder={this.mudaOrder}
-        />
+          />
 
-        {/* <div>
-          {this.state.camisetas
-          .filter(prod => {
-            return (prod.title.toLowerCase().includes(this.state.inputBuscarPorNome.toLowerCase()))
-          })
-          .filter(prod => {
-            return (this.state.inputValorMinimo === "" || prod.price >= this.state.inputValorMinimo)
-          })
-          .filter(prod => {
-            return (this.state.inputValorMaximo === "" || prod.price <= this.state.inputValorMaximo)
-          })
-          .sort((currentProd, nextProd) => {
-            switch (this.state.sortingParameter){
-              case "title":
-                return this.state.order * (currentProd.title.localCompare(nextProd.title))
-              default:
-                return this.state.order * (currentProd.price - nextProd.price)
-            }
-          })
-          .map(prod => {
-            return <Card key={prod.id} prod={prod} />
-          })
-          }
-        </div> */}
-
+          {funcaoFiltro}
+          
+          {meusProdutos}
+        </div>
         
-      <div>
-        <div>
-          <ContainerHeader/>
-        </div>  
-        {meusProdutos}
         <CarrinhoContainer>
           <h3>Carrinho</h3>
           {meuCarrinho}
           <p><b>Valor total carrinho: </b>R${this.valorTotal()},00</p>
         </CarrinhoContainer>
       </div>
-     </div>
     )
   }
 }
-export default App;

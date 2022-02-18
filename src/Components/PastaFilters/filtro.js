@@ -6,7 +6,7 @@ import {ContainerFiltro, ContainerInputs} from "./styledFiltro"
 // ========================================================
 export function ComponenteFiltro(props) {
     return(
-    <>
+        <>
         <ContainerFiltro>
             <h2> Filtro </h2>
             <ContainerInputs>
@@ -59,6 +59,6 @@ export function ComponenteFiltro(props) {
                 <option value={-1}> Decrescente </option>
             </select>
         </ContainerFiltro>
-    </>
+        </>
     )
 }

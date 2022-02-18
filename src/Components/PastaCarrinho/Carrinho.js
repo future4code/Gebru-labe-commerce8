@@ -1,16 +1,5 @@
 import React from 'react';
-import styled from 'styled-components';
-
-const ContainerPrincipal = styled.div`
-display: grid;
-align-items: center;
-text-align: center;
-justify-items: center;
-grid-template-rows: 1fr;
-grid-template-columns: 1fr 1fr 1fr 1fr 1fr 1fr;
-row-gap: 6px;
-column-gap: 6px;
-`
+import  {ContainerPrincipal} from './styledCarrinho';
 
 export default class Carrinho extends React.Component {
 
