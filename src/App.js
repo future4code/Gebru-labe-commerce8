@@ -1,4 +1,4 @@
-// Import dos componentes
+// Import dos componentes //
 import React from 'react';
 import {ComponenteFiltro} from './Components/PastaFilters/filtro';
 import listaProd from './Lista/listaDeProdutos.json';
